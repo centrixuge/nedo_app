@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'dart:convert';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -27,27 +28,31 @@ class _DriverRoutePageState extends State<DriverRoute> {
       ),
       body: Center(
         child: SizedBox(
-            width: double.infinity,
-            height: 150,
-            child: Image.network(
-              getStaticImageWithMarker(
-                  latitude: 35.55,
-                  longitude: 134.44,
-                  width: MediaQuery.of(context).size.width.toInt(),
-                  height: 150,
-                  zoom: 13),
-            )),
+          width: double.infinity,
+          height: 150,
+          child: FutureBuilder(
+            future: getStaticImageWithMarker(
+                width: MediaQuery.of(context).size.width.toInt(),
+                height: 150,
+                zoom: 13),
+            builder: (BuildContext context, AsyncSnapshot<String> snapshot) {
+              if (snapshot.hasData) {
+                return Image.network(snapshot.data!);
+              } else {
+                return Text("データが存在しません");
+              }
+            },
+          ),
+        ),
       ),
     );
   }
 }
 
-String getStaticImageWithMarker(
-    {required double longitude,
-    required double latitude,
-    required int width,
-    required int height,
-    int zoom = 16}) {
+Future<String> getStaticImageWithMarker(
+    {required int width, required int height, int zoom = 16}) async {
+  final mapboxPublicToken = dotenv.env['MAPBOX_PUBLIC_TOKEN'];
+
   Map geoJson = {
     "type": "FeatureCollection",
     "features": [
@@ -59,16 +64,20 @@ String getStaticImageWithMarker(
         },
         "geometry": {
           "type": "Point",
-          "coordinates": [longitude, latitude]
+          "coordinates": [135.4, 33.3]
         }
       }
     ]
   };
 
-  var mapboxPublicToken = dotenv.env['MAPBOX_PUBLIC_TOKEN'];
+  final driverJson = Uri.encodeComponent(jsonEncode(geoJson));
 
   return 'https://api.mapbox.com/styles/v1/mapbox/streets-v11/static/'
-      'geojson(${Uri.encodeComponent(jsonEncode(geoJson))})'
-      '/$longitude,$latitude,$zoom'
+      'geojson($driverJson)'
+      '/auto'
       '/${width}x$height?access_token=$mapboxPublicToken';
+}
+
+Future<String> getDriverJson() {
+  return rootBundle.loadString('driver.json');
 }

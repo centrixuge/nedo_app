@@ -56,11 +56,13 @@ class _DriverRoutePageState extends State<DriverRoute> {
 Future<String> getStaticImageWithMarker(
     {required int width, required int height, int zoom = 16}) async {
   final mapboxPublicToken = dotenv.env['MAPBOX_PUBLIC_TOKEN'];
+  final mapboxUserID = dotenv.env['MAPBOX_USER_ID'];
+  final mapboxStyleID = dotenv.env['MAPBOX_STYLE_ID'];
 
   final driverJson =
   Uri.encodeComponent(jsonEncode(jsonDecode(await getDriverJson())["0"][0]));
 
-  return 'https://api.mapbox.com/styles/v1/mapbox/streets-v11/static/'
+  return 'https://api.mapbox.com/styles/v1/$mapboxUserID/$mapboxStyleID/static/'
       'geojson($driverJson)'
       '/auto'
       '/${width}x$height?access_token=$mapboxPublicToken';

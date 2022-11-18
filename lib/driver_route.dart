@@ -32,7 +32,11 @@ class _DriverRoutePageState extends State<DriverRoute> {
           height: 150,
           child: FutureBuilder(
             future: getStaticImageWithMarker(
-                width: MediaQuery.of(context).size.width.toInt(),
+                width: MediaQuery
+                    .of(context)
+                    .size
+                    .width
+                    .toInt(),
                 height: 150,
                 zoom: 13),
             builder: (BuildContext context, AsyncSnapshot<String> snapshot) {
@@ -53,24 +57,8 @@ Future<String> getStaticImageWithMarker(
     {required int width, required int height, int zoom = 16}) async {
   final mapboxPublicToken = dotenv.env['MAPBOX_PUBLIC_TOKEN'];
 
-  Map geoJson = {
-    "type": "FeatureCollection",
-    "features": [
-      {
-        "type": "Feature",
-        "properties": {
-          "marker-color": '#ff0000',
-          "marker-size": 'large',
-        },
-        "geometry": {
-          "type": "Point",
-          "coordinates": [135.4, 33.3]
-        }
-      }
-    ]
-  };
-
-  final driverJson = Uri.encodeComponent(jsonEncode(geoJson));
+  final driverJson =
+  Uri.encodeComponent(jsonEncode(jsonDecode(await getDriverJson())["test"][0]));
 
   return 'https://api.mapbox.com/styles/v1/mapbox/streets-v11/static/'
       'geojson($driverJson)'

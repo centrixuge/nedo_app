@@ -58,7 +58,7 @@ Future<String> getStaticImageWithMarker(
   final mapboxPublicToken = dotenv.env['MAPBOX_PUBLIC_TOKEN'];
 
   final driverJson =
-  Uri.encodeComponent(jsonEncode(jsonDecode(await getDriverJson())["test"][0]));
+  Uri.encodeComponent(jsonEncode(jsonDecode(await getDriverJson())["0"][0]));
 
   return 'https://api.mapbox.com/styles/v1/mapbox/streets-v11/static/'
       'geojson($driverJson)'

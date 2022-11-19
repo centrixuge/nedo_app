@@ -48,9 +48,9 @@ class _DriverRoutePageState extends State<DriverRoute> {
                               driverJsonString: Uri.encodeComponent(
                                   jsonEncode(item["geojson"])),
                             ))),
-                        Text(item["dep_time"]),
-                        Text(item["arr_time"]),
-                        Text(arrTaskJA(item["arr_task"]))
+                        Text('🔵${item["dep_time"]} 発予定'),
+                        Text(
+                            '🔴${item["arr_time"]} 着予定 ${arrTaskJA(item["arr_task"])}')
                       ],
                     )
                 ],

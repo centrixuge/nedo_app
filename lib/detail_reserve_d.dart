@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'dart:convert';
 import 'timing.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -51,33 +53,44 @@ class _DetailReserveDestinationPageState
       appBar: AppBar(
         title: const Text("目的地の登録"),
       ),
-      body: FlutterMap(
-        options: MapOptions(
-          center: latLng.LatLng(35.654827, 139.796382),
-          zoom: 16.0,
-          maxZoom: 17.0,
-          minZoom: 3.0,
-        ),
-        children: [
-          TileLayer(
-            urlTemplate:
-                'https://api.mapbox.com/styles/v1/$mapboxUserID/$mapboxStyleID/tiles/{z}/{x}/{y}?access_token=$mapboxPublicToken',
-          ),
-          MarkerLayer(
-            markers: [
-              Marker(
-                  point: latLng.LatLng(35.654827, 139.796382),
-                  builder: (ctx) => IconButton(
-                      icon: const Icon(
-                        Icons.location_pin,
-                        color: Colors.redAccent,
-                      ),
-                      onPressed: () {
-                        _onButtonPressed("test_destination");
-                      })),
-            ],
-          ),
-        ],
+      body: FutureBuilder(
+        future: getNodeJsonString(),
+        builder: (BuildContext context, AsyncSnapshot<String> snapshot) {
+          if (snapshot.hasData) {
+            final nodeJson = jsonDecode(snapshot.data!)["features"];
+            return FlutterMap(
+                options: MapOptions(
+                  center: latLng.LatLng(35.654827, 139.796382),
+                  zoom: 16.0,
+                  maxZoom: 17.0,
+                  minZoom: 3.0,
+                ),
+                children: [
+                  TileLayer(
+                    urlTemplate:
+                        'https://api.mapbox.com/styles/v1/$mapboxUserID/$mapboxStyleID/tiles/{z}/{x}/{y}?access_token=$mapboxPublicToken',
+                  ),
+                  MarkerLayer(
+                    markers: [
+                      for (final item in nodeJson)
+                        Marker(
+                            point: latLng.LatLng(
+                                item["coordinates"][1], item["coordinates"][0]),
+                            builder: (ctx) => IconButton(
+                                icon: const Icon(
+                                  Icons.location_pin,
+                                  color: Colors.redAccent,
+                                ),
+                                onPressed: () {
+                                  _onButtonPressed(item["name"]);
+                                })),
+                    ],
+                  )
+                ]);
+          } else {
+            return const Text("データが存在しません");
+          }
+        },
       ),
     );
   }
@@ -125,3 +138,7 @@ class _DetailReserveDestinationPageState
 //   /// 入力欄をクリアにする
 //   // _textEditingController.clear();
 // }
+
+Future<String> getNodeJsonString() {
+  return rootBundle.loadString('node.json');
+}

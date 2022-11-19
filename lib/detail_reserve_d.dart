@@ -9,17 +9,20 @@ import 'package:latlong2/latlong.dart' as latLng;
 
 // class DetailReserve extends StatelessWidget{
 class DetailReserveDestination extends StatefulWidget {
-  const DetailReserveDestination(this.user);
-
+  final String origin;
+  final String usertype;
   final User user;
+
+  const DetailReserveDestination(this.user, this.usertype, this.origin);
 
   // DetailReserve({Key? key, required this.user}) : super(key: key);
   @override
   _DetailReserveDestinationPageState createState() =>
-      _DetailReserveDestinationPageState(this.user);
+      _DetailReserveDestinationPageState(this.user, this.usertype, this.origin);
 }
 
-class _DetailReserveDestinationPageState extends State<DetailReserveDestination> {
+class _DetailReserveDestinationPageState
+    extends State<DetailReserveDestination> {
   final TextEditingController _textEditingController_O =
       TextEditingController();
   final TextEditingController _textEditingController_D =
@@ -32,9 +35,11 @@ class _DetailReserveDestinationPageState extends State<DetailReserveDestination>
   // ignore: non_constant_identifier_names
   bool isButtonActive_D = false;
 
-  late final User user;
+  final String origin;
+  final String usertype;
+  final User user;
 
-  _DetailReserveDestinationPageState(this.user);
+  _DetailReserveDestinationPageState(this.user, this.usertype, this.origin);
 
   @override
   Widget build(BuildContext context) {
@@ -43,53 +48,43 @@ class _DetailReserveDestinationPageState extends State<DetailReserveDestination>
     final mapboxStyleID = dotenv.env['MAPBOX_STYLE_ID'];
 
     return Scaffold(
-        appBar: AppBar(
-          title: const Text("目的地の登録"),
+      appBar: AppBar(
+        title: const Text("目的地の登録"),
+      ),
+      body: FlutterMap(
+        options: MapOptions(
+          center: latLng.LatLng(35.654827, 139.796382),
+          zoom: 16.0,
+          maxZoom: 17.0,
+          minZoom: 3.0,
         ),
-        body: Stack(children: [
-          FlutterMap(
-            options: MapOptions(
-              center: latLng.LatLng(35.654827, 139.796382),
-              zoom: 16.0,
-              maxZoom: 17.0,
-              minZoom: 3.0,
-            ),
-            children: [
-              TileLayer(
-                urlTemplate:
-                    'https://api.mapbox.com/styles/v1/$mapboxUserID/$mapboxStyleID/tiles/{z}/{x}/{y}?access_token=$mapboxPublicToken',
-              ),
-              MarkerLayer(
-                markers: [
-                  Marker(
-                      point: latLng.LatLng(35.654827, 139.796382),
-                      builder: (ctx) => IconButton(
-                          icon: const Icon(
-                            Icons.location_pin,
-                            color: Colors.redAccent,
-                          ),
-                          onPressed: () {
-                            () => _onButtonPressed();
-                          })),
-                ],
-              ),
+        children: [
+          TileLayer(
+            urlTemplate:
+                'https://api.mapbox.com/styles/v1/$mapboxUserID/$mapboxStyleID/tiles/{z}/{x}/{y}?access_token=$mapboxPublicToken',
+          ),
+          MarkerLayer(
+            markers: [
+              Marker(
+                  point: latLng.LatLng(35.654827, 139.796382),
+                  builder: (ctx) => IconButton(
+                      icon: const Icon(
+                        Icons.location_pin,
+                        color: Colors.redAccent,
+                      ),
+                      onPressed: () {
+                        _onButtonPressed("test_destination");
+                      })),
             ],
           ),
-          ElevatedButton(
-              // ボタンが有効かどうかを切り替えるには、三項演算子と「null」を使います。
-              // 三項演算子の条件式に、有効・無効かの条件を指定し、無効であれば「null」を返すようにします。
-              // https://www.choge-blog.com/programming/flutterbutton-enabled-disabled/
-              onPressed: (isButtonActive_O && isButtonActive_D)
-                  ? () => _onButtonPressed()
-                  : null,
-              child: Text('出発・到着時刻の設定に進む')),
-        ]));
+        ],
+      ),
+    );
   }
 
-  _onButtonPressed() {
-    final origin = _textEditingController_O.text;
-    final destination = _textEditingController_D.text;
-    final usertype = "rider";
+  _onButtonPressed(String destination) {
+    final origin = this.origin;
+    final usertype = this.usertype;
     // CollectionReference posts = FirebaseFirestore.instance.collection('requests');
     // posts.doc("1").set({"origin": Origin, "destination": Destination});
 

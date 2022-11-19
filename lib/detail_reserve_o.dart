@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'timing.dart';
+import 'detail_reserve_d.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -25,13 +25,6 @@ class _DetailReserveOriginPageState extends State<DetailReserveOrigin> {
   final TextEditingController _textEditingController_D =
       TextEditingController();
 
-  // dynamic isDisabled = true;
-  // ignore: non_constant_identifier_names
-  bool isButtonActive_O = false;
-
-  // ignore: non_constant_identifier_names
-  bool isButtonActive_D = false;
-
   late final User user;
 
   _DetailReserveOriginPageState(this.user);
@@ -43,53 +36,42 @@ class _DetailReserveOriginPageState extends State<DetailReserveOrigin> {
     final mapboxStyleID = dotenv.env['MAPBOX_STYLE_ID'];
 
     return Scaffold(
-        appBar: AppBar(
-          title: const Text("出発地の登録"),
+      appBar: AppBar(
+        title: const Text("出発地の登録"),
+      ),
+      body: FlutterMap(
+        options: MapOptions(
+          center: latLng.LatLng(35.654827, 139.796382),
+          zoom: 16.0,
+          maxZoom: 17.0,
+          minZoom: 3.0,
         ),
-        body: Stack(children: [
-          FlutterMap(
-            options: MapOptions(
-              center: latLng.LatLng(35.654827, 139.796382),
-              zoom: 16.0,
-              maxZoom: 17.0,
-              minZoom: 3.0,
-            ),
-            children: [
-              TileLayer(
-                urlTemplate:
-                    'https://api.mapbox.com/styles/v1/$mapboxUserID/$mapboxStyleID/tiles/{z}/{x}/{y}?access_token=$mapboxPublicToken',
-              ),
-              MarkerLayer(
-                markers: [
-                  Marker(
-                      point: latLng.LatLng(35.654827, 139.796382),
-                      builder: (ctx) => IconButton(
-                          icon: const Icon(
-                            Icons.location_pin,
-                            color: Colors.redAccent,
-                          ),
-                          onPressed: () {
-                            () => _onButtonPressed();
-                          })),
-                ],
-              ),
+        children: [
+          TileLayer(
+            urlTemplate:
+                'https://api.mapbox.com/styles/v1/$mapboxUserID/$mapboxStyleID/tiles/{z}/{x}/{y}?access_token=$mapboxPublicToken',
+          ),
+          MarkerLayer(
+            markers: [
+              Marker(
+                  point: latLng.LatLng(35.654827, 139.796382),
+                  builder: (ctx) => IconButton(
+                      icon: const Icon(
+                        Icons.location_pin,
+                        color: Colors.redAccent,
+                      ),
+                      onPressed: () {
+                        _onButtonPressed("test_origin");
+                      })),
             ],
           ),
-          ElevatedButton(
-              // ボタンが有効かどうかを切り替えるには、三項演算子と「null」を使います。
-              // 三項演算子の条件式に、有効・無効かの条件を指定し、無効であれば「null」を返すようにします。
-              // https://www.choge-blog.com/programming/flutterbutton-enabled-disabled/
-              onPressed: (isButtonActive_O && isButtonActive_D)
-                  ? () => _onButtonPressed()
-                  : null,
-              child: Text('出発・到着時刻の設定に進む')),
-        ]));
+        ],
+      ),
+    );
   }
 
-  _onButtonPressed() {
-    final origin = _textEditingController_O.text;
-    final destination = _textEditingController_D.text;
-    final usertype = "rider";
+  _onButtonPressed(String origin) {
+    const usertype = "rider";
     // CollectionReference posts = FirebaseFirestore.instance.collection('requests');
     // posts.doc("1").set({"origin": Origin, "destination": Destination});
 
@@ -102,7 +84,8 @@ class _DetailReserveOriginPageState extends State<DetailReserveOrigin> {
     Navigator.push(
       context,
       MaterialPageRoute(
-          builder: (context) => Timing(user, usertype, origin, destination)),
+          builder: (context) =>
+              DetailReserveDestination(user, usertype, origin)),
       // MaterialPageRoute(builder: (context) => Timing(user: user, origin: origin, destination: destination)),
       // 遷移先の画面としてリスト追加画面を指定
       // onPressedには、(){}というカッコを書きます。

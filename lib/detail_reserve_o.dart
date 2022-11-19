@@ -8,17 +8,18 @@ import 'package:flutter_map/flutter_map.dart';
 import 'package:latlong2/latlong.dart' as latLng;
 
 // class DetailReserve extends StatelessWidget{
-class DetailReserve extends StatefulWidget {
-  const DetailReserve(this.user);
+class DetailReserveOrigin extends StatefulWidget {
+  const DetailReserveOrigin(this.user);
 
   final User user;
 
   // DetailReserve({Key? key, required this.user}) : super(key: key);
   @override
-  _DetailReservePageState createState() => _DetailReservePageState(this.user);
+  _DetailReserveOriginPageState createState() =>
+      _DetailReserveOriginPageState(this.user);
 }
 
-class _DetailReservePageState extends State<DetailReserve> {
+class _DetailReserveOriginPageState extends State<DetailReserveOrigin> {
   final TextEditingController _textEditingController_O =
       TextEditingController();
   final TextEditingController _textEditingController_D =
@@ -33,7 +34,7 @@ class _DetailReservePageState extends State<DetailReserve> {
 
   late final User user;
 
-  _DetailReservePageState(this.user);
+  _DetailReserveOriginPageState(this.user);
 
   @override
   Widget build(BuildContext context) {
@@ -43,7 +44,7 @@ class _DetailReservePageState extends State<DetailReserve> {
 
     return Scaffold(
         appBar: AppBar(
-          title: const Text("出発地/目的地の登録"),
+          title: const Text("出発地の登録"),
         ),
         body: Stack(children: [
           FlutterMap(

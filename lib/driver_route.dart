@@ -39,24 +39,35 @@ class _DriverRoutePageState extends State<DriverRoute> {
                   for (final item in driversJson)
                     Column(
                       children: [
-                        SizedBox(
+                        Container(
                             width: double.infinity,
                             height: 150,
+                            padding: const EdgeInsets.all(10),
                             child: Image.network(getStaticImageWithMarker(
                               width: MediaQuery.of(context).size.width.toInt(),
                               height: 150,
                               driverJsonString: Uri.encodeComponent(
                                   jsonEncode(item["geojson"])),
                             ))),
-                        Text('🔵${item["dep_time"]} 発予定'),
-                        Text(
-                            '🔴${item["arr_time"]} 着予定 ${arrTaskJA(item["arr_task"])}')
+                        Container(
+                          alignment: Alignment.centerLeft,
+                          padding: const EdgeInsets.only(left: 30, right: 30),
+                          child: RichText(
+                              text: TextSpan(children: [
+                            TextSpan(text: '🔵${item["dep_time"]} 発予定'),
+                            const TextSpan(text: '\n'),
+                            TextSpan(text: '🔴${item["arr_time"]} 着予定 '),
+                            TextSpan(
+                                text: arrTaskJA(item["arr_task"]),
+                                style: TextStyle(fontWeight: FontWeight.bold))
+                          ])),
+                        )
                       ],
                     )
                 ],
               ));
             } else {
-              return Text("データが存在しません");
+              return const Text("データが存在しません");
             }
           },
         ),

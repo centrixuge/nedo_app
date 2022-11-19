@@ -5,15 +5,15 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 // class DetailReserve extends StatelessWidget{
-class DetailReserve extends StatefulWidget {
-  const DetailReserve(this.user);
+class DriverInfo extends StatefulWidget {
+  const DriverInfo(this.user);
   final User user;
   // DetailReserve({Key? key, required this.user}) : super(key: key);
   @override
-  _DetailReservePageState createState() => _DetailReservePageState(this.user);
+  _DriverInfoPageState createState() => _DriverInfoPageState(this.user);
 }
 
-class _DetailReservePageState extends State<DetailReserve> {
+class _DriverInfoPageState extends State<DriverInfo> {
   final TextEditingController _textEditingController_O =
   TextEditingController();
   final TextEditingController _textEditingController_D =
@@ -25,7 +25,7 @@ class _DetailReservePageState extends State<DetailReserve> {
   bool isButtonActive_D = false;
 
   late final User user;
-  _DetailReservePageState(this.user);
+  _DriverInfoPageState(this.user);
 
   @override
   Widget build(BuildContext context) {
@@ -79,14 +79,14 @@ class _DetailReservePageState extends State<DetailReserve> {
             // ボタンが有効かどうかを切り替えるには、三項演算子と「null」を使います。
             // 三項演算子の条件式に、有効・無効かの条件を指定し、無効であれば「null」を返すようにします。
             // https://www.choge-blog.com/programming/flutterbutton-enabled-disabled/
-            onPressed: (isButtonActive_O && isButtonActive_D) ? () => _onButtonPressed() : null,
-           // onPressed: (isButtonActive_O && isButtonActive_D) ? () {
-           //    final Origin = _textEditingController_O.text;
-           //    final Destination = _textEditingController_D.text;
-           //    CollectionReference posts = FirebaseFirestore.instance.collection('requests');
-           //    posts.add({"origin": _textEditingController_O, "destination": _textEditingController_D});
-           //  } : null,
-           child: Text('出発・到着時刻の設定に進む')),
+              onPressed: (isButtonActive_O && isButtonActive_D) ? () => _onButtonPressed() : null,
+              // onPressed: (isButtonActive_O && isButtonActive_D) ? () {
+              //    final Origin = _textEditingController_O.text;
+              //    final Destination = _textEditingController_D.text;
+              //    CollectionReference posts = FirebaseFirestore.instance.collection('requests');
+              //    posts.add({"origin": _textEditingController_O, "destination": _textEditingController_D});
+              //  } : null,
+              child: Text('出発・到着時刻の設定に進む')),
         ]),
       ),
     );
@@ -94,7 +94,7 @@ class _DetailReservePageState extends State<DetailReserve> {
   _onButtonPressed(){
     final origin = _textEditingController_O.text;
     final destination = _textEditingController_D.text;
-    final usertype = "rider";
+    final usertype = "driver";
     // CollectionReference posts = FirebaseFirestore.instance.collection('requests');
     // posts.doc("1").set({"origin": Origin, "destination": Destination});
 
@@ -135,4 +135,3 @@ class _DetailReservePageState extends State<DetailReserve> {
 //   /// 入力欄をクリアにする
 //   // _textEditingController.clear();
 // }
-

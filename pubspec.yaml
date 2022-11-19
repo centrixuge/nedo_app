@@ -36,6 +36,8 @@ dependencies:
   firebase_auth:
   cloud_firestore:
   flutter_dotenv:
+  flutter_map:
+  latlong2:
 
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
@@ -97,3 +99,4 @@ flutter:
   assets:
     - .env
     - driver.json  # TODO: APIサーバー経由で読むようにする
+    - node.json

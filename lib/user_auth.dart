@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'detail_reserve.dart';
+import 'detail_reserve_o.dart';
 
 // ログイン用フォーム
 class UserAuth extends StatefulWidget {
@@ -69,7 +69,7 @@ class _UserAuthPageState extends State<UserAuth> {
                       // チャット画面に遷移＋ログイン画面を破棄
                       await Navigator.of(context).pushReplacement(
                         MaterialPageRoute(builder: (context) {
-                          return DetailReserve(result.user!);
+                          return DetailReserveOrigin(result.user!);
                         }),
                       );
                     } catch (e) {
@@ -99,7 +99,7 @@ class _UserAuthPageState extends State<UserAuth> {
                       // チャット画面に遷移＋ログイン画面を破棄
                       await Navigator.of(context).pushReplacement(
                         MaterialPageRoute(builder: (context) {
-                          return DetailReserve(result.user!);
+                          return DetailReserveOrigin(result.user!);
                         }),
                       );
                     } catch (e) {

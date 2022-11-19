@@ -47,3 +47,4 @@ app.*.map.json
 
 # TODO: APIサーバー経由で読むようにする
 driver.json
+node.json

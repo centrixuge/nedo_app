@@ -6,6 +6,8 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'firebase_options.dart';
+import 'user_auth.dart';
+import 'driver_auth.dart';
 
 // widgetツリー
 // MyApp -> MaterialApp-> Scaffold -> Center -> Column -> Text
@@ -28,16 +30,16 @@ class MyApp extends StatelessWidget {
       title: 'Ridesharing App',
       theme: ThemeData(
         // テーマカラー
-          primarySwatch: Colors.red,
+          primarySwatch: Colors.blueGrey,
           // primaryColor: PrimaryColor,
           // PrimaryColor全体を変更したくない場合は、
           // ThemeData AppBarThemeを定義することもできます。
           appBarTheme: AppBarTheme(
-            color: const Color(0xFF151026),
+            color: Color(0xFFFF8A65),
           )),
       // リスト一覧画面を表示
       // home: Itinerary(),
-      home: LoginPage(),
+      home: UserType(),
     );
   }
 }
@@ -48,127 +50,239 @@ class MyApp extends StatelessWidget {
 // body中のColumnは縦に複数のウィジェットを並べて配置する時に使う
 
 // 色を宣言
-const PrimaryColor = const Color(0xFF151026);
+const PrimaryColor = Color(0xFFFFCCBC);
 
-// ラジオボタンとして実装
-enum RadioValue { FIRST, SECOND, THIRD, FOURTH }
-
-// ログイン用フォーム
-class LoginPage extends StatefulWidget {
+class UserType extends StatefulWidget {
 
   @override
-  _LoginPageState createState() => _LoginPageState();
+  _UserTypeState createState() => _UserTypeState();
 }
-// ログイン・認証系の参考
-// https://www.flutter-study.dev/firebase-app/authentication
 
-class _LoginPageState extends State<LoginPage> {
+// ラジオボタンとして実装
+enum RadioValue { Driver, Rider }
+
+class _UserTypeState extends State<UserType> {
   // メッセージ表示用
-  String infoText = '';
-  // 入力したメールアドレス・パスワード
-  String email = '';
-  String password = '';
-  late final User user;
+  String usertype = '';
+  RadioValue _gValue = RadioValue.Rider;
+
+  // @override
+  // Widget build(BuildContext context) {
+  //   return Scaffold(
+  //       body: SafeArea(
+  //         child: Column(
+  //           mainAxisAlignment: MainAxisAlignment.center,
+  //           children: [
+  //             const SizedBox(
+  //               height: 50.0,
+  //             ),
+  //           RadioListTile(
+  //             title: Text('登録ドライバー'),
+  //             // subtitle: Text('自宅 <-> 花街道つけち / 往復'),
+  //             value: RadioValue.Driver,
+  //             groupValue: _gValue,
+  //             onChanged: (value) => _onRadioSelected(value),
+  //           ),
+  //           RadioListTile(
+  //             title: Text('ライドシェアサービス利用者'),
+  //             // subtitle: Text('自宅 <-> アートピア付知 / 往復'),
+  //             value: RadioValue.Rider,
+  //             groupValue: _gValue,
+  //             onChanged: (value) => _onRadioSelected(value),
+  //           ),
+  //           ElevatedButton(
+  //             onPressed: () => (_gValue ==  RadioValue.Driver) ? () => _onButtonPressed_D() : _onButtonPressed_R(),
+  //             child: Text('ログイン画面に進む')),
+  //           ],
+  //         ),
+  //       ),
+  //   );
+  // }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Center(
-        child: Container(
-          padding: EdgeInsets.all(24),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: <Widget>[
-              // メールアドレス入力
-              TextFormField(
-                decoration: InputDecoration(labelText: 'メールアドレス'),
-                onChanged: (String value) {
-                  setState(() {
-                    email = value;
-                  });
-                },
-              ),
-              // パスワード入力
-              TextFormField(
-                decoration: InputDecoration(labelText: 'パスワード'),
-                obscureText: true,
-                onChanged: (String value) {
-                  setState(() {
-                    password = value;
-                  });
-                },
-              ),
-              Container(
-                padding: EdgeInsets.all(8),
-                // メッセージ表示
-                child: Text(infoText),
-              ),
-              Container(
-                width: double.infinity,
-                // ユーザー登録ボタン
-                child: ElevatedButton(
-                  child: Text('ユーザー登録'),
-                  onPressed: () async {
-                    try {
-                      // メール/パスワードでユーザー登録
-                      final FirebaseAuth auth = FirebaseAuth.instance;
-                      final result = await auth.createUserWithEmailAndPassword(
-                        email: email,
-                        password: password,
-                      );
-                      // ユーザー登録に成功した場合
-                      // チャット画面に遷移＋ログイン画面を破棄
-                      await Navigator.of(context).pushReplacement(
-                        MaterialPageRoute(builder: (context) {
-                          return DetailReserve(result.user!);
-                        }),
-                      );
-                    } catch (e) {
-                      // ユーザー登録に失敗した場合
-                      setState(() {
-                        infoText = "登録に失敗しました：${e.toString()}";
-                      });
-                    }
-                  },
-                ),
-              ),
-              const SizedBox(height: 8),
-              Container(
-                width: double.infinity,
-                // ログイン登録ボタン
-                child: OutlinedButton(
-                  child: Text('ログイン'),
-                  onPressed: () async {
-                    try {
-                      // メール/パスワードでログイン
-                      final FirebaseAuth auth = FirebaseAuth.instance;
-                      final result = await auth.signInWithEmailAndPassword(
-                        email: email,
-                        password: password,
-                      );
-                      // ログインに成功した場合
-                      // チャット画面に遷移＋ログイン画面を破棄
-                      await Navigator.of(context).pushReplacement(
-                        MaterialPageRoute(builder: (context) {
-                          return DetailReserve(result.user!);
-                        }),
-                      );
-                    } catch (e) {
-                      // ログインに失敗した場合
-                      setState(() {
-                        infoText = "ログインに失敗しました：${e.toString()}";
-                      });
-                    }
-                  },
-                ),
-              ),
-            ],
-          ),
-        ),
+      appBar: AppBar(
+        title: Text('ログインユーザー設定'),
       ),
+      body: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: <Widget>[
+          Expanded(
+            child: Container(
+              constraints: BoxConstraints.expand(height:10),
+              alignment: Alignment.center,
+              width: 400,
+              height: 10,
+              // color: Colors.indigoAccent,
+              // child: Text("アイコンをタッチしてください", style: TextStyle(color: Colors.white)),
+            ),
+          ),
+
+          Center(
+            child: Container(
+            alignment: Alignment.center,
+            width: 400,
+            height: 30,
+            color: Colors.indigoAccent,
+            child: Text("アイコンをタッチしてください", style: TextStyle(color: Colors.white)),
+            ),
+          ),
+
+          Expanded(
+            child: Row(
+              children: <Widget>[
+                Expanded(
+                  child: Container(
+                    margin: EdgeInsets.all(5.0),
+                    child: FittedBox(
+                        child: IconButton(
+                            onPressed: () => _onButtonPressed_D(),
+                            icon: Icon(Icons.drive_eta_outlined)
+                        )
+                    ),
+                  ),
+                ),
+
+                Expanded(
+                  child: Container(
+                    margin: EdgeInsets.all(5.0),
+                    child: FittedBox(
+                      child: IconButton(
+                          onPressed: () => _onButtonPressed_R(),
+                          icon: Icon(Icons.supervised_user_circle_sharp)
+                      )
+                  ),
+                ),
+                )
+              ],
+            ),
+          ),
+
+          Expanded(
+            child: Row(
+              children: <Widget>[
+          //       Expanded(
+          //         child: ConstrainedBox(
+          //           constraints: BoxConstraints.expand(height: 15.0),
+          //           // margin: EdgeInsets.all(5.0),
+          //           // decoration: BoxDecoration(
+          //               // border: Border.all(color: Colors.pink.shade400)
+          //           // ),
+          //           child: FittedBox(
+          //             fit: BoxFit.fitWidth,
+          //             child: Text("登録ドライバー", textAlign: TextAlign.center, maxLines: 1,
+          //               overflow: TextOverflow.ellipsis, style: TextStyle(fontSize: 10)),
+          //           ),
+          //         ),
+          //       ),
+          //       Expanded(
+          //         child: ConstrainedBox(
+          //           // margin: EdgeInsets.all(5.0),
+          //           constraints: BoxConstraints.expand(height: 15.0),
+          //           child:FittedBox(
+          //             fit: BoxFit.fitWidth,
+          //             child: Text("ライドシェア利用", textAlign: TextAlign.center, maxLines: 1,
+          //               overflow: TextOverflow.ellipsis, style: TextStyle(fontSize: 10))
+          //             ),
+          //           ),
+          //         ),
+          //     ],
+          //   ),
+          // ),
+                Expanded(
+                  child: ConstrainedBox(
+                    constraints: BoxConstraints.expand(height: 40.0),
+                    child: Text("登録ドライバー", textAlign: TextAlign.center, maxLines: 1,
+                          overflow: TextOverflow.ellipsis, style: TextStyle(fontSize: 24)),
+                  ),
+                ),
+
+                Expanded(
+                  child: ConstrainedBox(
+                    constraints: BoxConstraints.expand(height: 40.0),
+                    child: Text("ライドシェア利用", textAlign: TextAlign.center, maxLines: 1,
+                            overflow: TextOverflow.ellipsis, style: TextStyle(fontSize: 24))
+                    ),
+                  ),
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
+
+    // return Scaffold(
+    //    appBar: AppBar(
+    //        title: Text('BMI CALCULATOR'),
+    //    )
+    //
+    //    body: Column(
+    //      children: <Widget>[
+    //         Expanded(
+    //           child: Row(
+    //        const Text("登録ドライバー"),
+    //        const Text("ライドシェア利用"),
+    //      ]
+    //    )
+    //
+    //     child:Row(
+    //       mainAxisAlignment: MainAxisAlignment.center,
+    //       children:[
+    //         IconButton(
+    //           icon: Icon(Icons.drive_eta_outlined),
+    //           onPressed: () => _onButtonPressed_D(),
+    //           iconSize: 180,
+    //         ),
+    //         IconButton(
+    //           icon: Icon(Icons.supervised_user_circle_sharp),
+    //           onPressed: () => _onButtonPressed_R(),
+    //           iconSize: 180,
+    //         ),
+    //       ]
+    //     ),
+    //
+    //
+    //       children:[
+    //
+    //       ]
+    //     )
+    //     )
+    // );
+  }
+
+  // _onRadioSelected(value) {
+  //   setState(() {
+  //     _gValue = value;
+  //   });
+  // }
+
+  _onButtonPressed_D(){
+    // final usertype = _gValue;
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => DriverAuth()),
+      // MaterialPageRoute(builder: (context) => Timing(user: user, origin: origin, destination: destination)),
+      // 遷移先の画面としてリスト追加画面を指定
+      // onPressedには、(){}というカッコを書きます。
+      // この後{}の中に、ボタンを押した時に呼ばれるコードを書いていきます。
+    );
+  }
+
+  _onButtonPressed_R(){
+    // final usertype = _gValue;
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => UserAuth()),
+      // MaterialPageRoute(builder: (context) => Timing(user: user, origin: origin, destination: destination)),
+      // 遷移先の画面としてリスト追加画面を指定
+      // onPressedには、(){}というカッコを書きます。
+      // この後{}の中に、ボタンを押した時に呼ばれるコードを書いていきます。
     );
   }
 }
+
+
 
 // class ChatPage extends StatelessWidget {
 //   // 引数からユーザー情報を受け取れるようにする
@@ -220,6 +334,10 @@ class _LoginPageState extends State<LoginPage> {
 
 
 // 旅程のリストを最初から与えておくパタン(最初のver)
+
+// ラジオボタンとして実装
+// enum RadioValue { FIRST, SECOND, THIRD, FOURTH }
+
 
 // class Itinerary extends StatefulWidget {
 //   @override

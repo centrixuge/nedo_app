@@ -9,12 +9,13 @@ class Purpose extends StatefulWidget {
   final String destination;
   final String departure;
   final String arrival;
+  final String usertype;
   final User user;
-  const Purpose(this.user, this.origin, this.destination, this.departure, this.arrival);
+  const Purpose(this.user, this.usertype, this.origin, this.destination, this.departure, this.arrival);
 
   // Purpose({Key? key, required this.user, required this.origin, required this.destination, required this.departure, required this.arrival}) : super(key: key);
   @override
-  _PurposePageState createState() => _PurposePageState(this.user, this.origin, this.destination, this.departure, this.arrival);
+  _PurposePageState createState() => _PurposePageState(this.user, this.usertype, this.origin, this.destination, this.departure, this.arrival);
 }
 
 class _PurposePageState extends State<Purpose> {
@@ -30,9 +31,10 @@ class _PurposePageState extends State<Purpose> {
   final String destination;
   final String departure;
   final String arrival;
+  final String usertype;
 
   final User user;
-  _PurposePageState(this.user, this.origin, this.destination, this.departure, this.arrival);
+  _PurposePageState(this.user, this.usertype, this.origin, this.destination, this.departure, this.arrival);
 
   @override
   Widget build(BuildContext context) {
@@ -97,6 +99,7 @@ class _PurposePageState extends State<Purpose> {
   }
   _onButtonPressed(){
     final user = this.user.email;
+    final usertype = widget.usertype;
     final departure = widget.departure;
     final arrival = widget.arrival;
     final origin = widget.origin;
@@ -107,6 +110,7 @@ class _PurposePageState extends State<Purpose> {
     // posts.doc("1").set({"departure": Departure, "arrival": Arrival});
     FirebaseFirestore.instance.collection('requests').add({
       "user": user,
+      "usertype": usertype,
       "origin": origin,
       "destination": destination,
       "departure": departure,

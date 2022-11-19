@@ -3,16 +3,19 @@ import 'purpose.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+// import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
+import 'package:intl/intl.dart';
 
 class Timing extends StatefulWidget {
   final String origin;
   final String destination;
+  final String usertype;
   final User user;
-  const Timing(this.user, this.origin, this.destination);
+  const Timing(this.user, this.usertype, this.origin, this.destination);
 
   // Timing({Key? key, required this.user , required this.origin, required this.destination}) : super(key: key);
   @override
-  _TimingPageState createState() => _TimingPageState(this.user, this.origin, this.destination);
+  _TimingPageState createState() => _TimingPageState(this.user, this.usertype, this.origin, this.destination);
 }
 
 class _TimingPageState extends State<Timing> {
@@ -26,9 +29,16 @@ class _TimingPageState extends State<Timing> {
   bool isButtonActive_E = false;
   final String origin;
   final String destination;
+  final String usertype;
 
   final User user;
-  _TimingPageState(this.user, this.origin, this.destination);
+  _TimingPageState(this.user, this.usertype, this.origin, this.destination);
+
+  // 選択した日時を格納する変数
+  var _mydatetime = new DateTime.now();
+
+  // 日時を指定したフォーマットで指定するためのフォーマッター
+  var formatter = new DateFormat('yyyy/MM/dd(E) HH:mm');
 
   @override
   Widget build(BuildContext context) {
@@ -38,6 +48,12 @@ class _TimingPageState extends State<Timing> {
       ),
       body: Container(
         child: Column(children: [
+          // ドラムロールに書き換え中
+          // Text(
+          //   formatter.format(_mydatetime),
+          //   style: Theme.of(context).textTheme.display1,
+          // )
+
           TextField(
             controller: _textEditingController_B,
             onChanged: (String value) {
@@ -96,6 +112,7 @@ class _TimingPageState extends State<Timing> {
     final arrival = _textEditingController_E.text;
     final origin = widget.origin;
     final destination = widget.destination;
+    final usertype = widget.usertype;
     // CollectionReference posts = FirebaseFirestore.instance.collection('requests');
     // posts.doc("1").set({"departure": Departure, "arrival": Arrival});
 
@@ -109,7 +126,7 @@ class _TimingPageState extends State<Timing> {
 
     Navigator.push(
         context,
-        MaterialPageRoute(builder: (context) => Purpose(user, origin, destination, departure, arrival
+        MaterialPageRoute(builder: (context) => Purpose(user, usertype, origin, destination, departure, arrival
           // user: user,
           // origin: origin,
           // destination: destination,

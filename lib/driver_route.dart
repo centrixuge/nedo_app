@@ -37,15 +37,20 @@ class _DriverRoutePageState extends State<DriverRoute> {
                   child: Column(
                 children: [
                   for (final item in driversJson)
-                    SizedBox(
-                        width: double.infinity,
-                        height: 150,
-                        child: Image.network(getStaticImageWithMarker(
-                          width: MediaQuery.of(context).size.width.toInt(),
-                          height: 150,
-                          driverJsonString:
-                              Uri.encodeComponent(jsonEncode(item)),
-                        ))),
+                    Column(
+                      children: [
+                        SizedBox(
+                            width: double.infinity,
+                            height: 150,
+                            child: Image.network(getStaticImageWithMarker(
+                              width: MediaQuery.of(context).size.width.toInt(),
+                              height: 150,
+                              driverJsonString:
+                                  Uri.encodeComponent(jsonEncode(item)),
+                            ))),
+                        Text('abc')
+                      ],
+                    )
                 ],
               ));
             } else {

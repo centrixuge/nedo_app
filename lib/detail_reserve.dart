@@ -3,11 +3,16 @@ import 'timing.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:flutter_map/flutter_map.dart';
+import 'package:latlong2/latlong.dart' as latLng;
 
 // class DetailReserve extends StatelessWidget{
 class DetailReserve extends StatefulWidget {
   const DetailReserve(this.user);
+
   final User user;
+
   // DetailReserve({Key? key, required this.user}) : super(key: key);
   @override
   _DetailReservePageState createState() => _DetailReservePageState(this.user);
@@ -15,83 +20,58 @@ class DetailReserve extends StatefulWidget {
 
 class _DetailReservePageState extends State<DetailReserve> {
   final TextEditingController _textEditingController_O =
-  TextEditingController();
+      TextEditingController();
   final TextEditingController _textEditingController_D =
-  TextEditingController();
+      TextEditingController();
+
   // dynamic isDisabled = true;
   // ignore: non_constant_identifier_names
   bool isButtonActive_O = false;
+
   // ignore: non_constant_identifier_names
   bool isButtonActive_D = false;
 
   late final User user;
+
   _DetailReservePageState(this.user);
 
   @override
   Widget build(BuildContext context) {
+    final mapboxPublicToken = dotenv.env['MAPBOX_PUBLIC_TOKEN'];
+    final mapboxUserID = dotenv.env['MAPBOX_USER_ID'];
+    final mapboxStyleID = dotenv.env['MAPBOX_STYLE_ID'];
+
     return Scaffold(
-      appBar: AppBar(
-        title: const Text("出発地/目的地の登録"),
-      ),
-      body: Container(
-        child: Column(children: [
-          TextField(
-            controller: _textEditingController_O,
-            // onSubmitted: _onSubmitted0, // onSubmitted関数を定義
-
-            onChanged: (String value) {
-              setState(() {
-                isButtonActive_O = value.isNotEmpty;
-              });
-            },
-            enabled: true,
-            // maxLength: 50, // 入力数
-            style: const TextStyle(color: Colors.black),
-            obscureText: false,
-            maxLines: 1,
-            decoration: const InputDecoration(
-              icon: Icon(Icons.maps_home_work_outlined),
-              hintText: '出発地を設定してください',
-              labelText: '出発地',
+        appBar: AppBar(
+          title: const Text("出発地/目的地の登録"),
+        ),
+        body: Stack(children: [
+          FlutterMap(
+            options: MapOptions(
+              center: latLng.LatLng(35.654827, 139.796382),
+              zoom: 16.0,
+              maxZoom: 17.0,
+              minZoom: 3.0,
             ),
+            children: [
+              TileLayer(
+                urlTemplate:
+                    'https://api.mapbox.com/styles/v1/$mapboxUserID/$mapboxStyleID/tiles/{z}/{x}/{y}?access_token=$mapboxPublicToken',
+              ),
+            ],
           ),
-          TextField(
-            controller: _textEditingController_D,
-            onChanged: (String value) {
-              setState(() {
-                isButtonActive_D = value.isNotEmpty;
-              });
-            },
-            // onSubmitted: _onSubmittedD, // onSubmitted関数を定義
-            enabled: true,
-            // maxLength: 50, // 入力数
-            style: const TextStyle(color: Colors.black),
-            obscureText: false,
-            maxLines: 1,
-            decoration: const InputDecoration(
-              icon: Icon(Icons.maps_home_work),
-              hintText: '目的地を設定してください',
-              labelText: '目的地',
-            ),
-          ),
-
           ElevatedButton(
-            // ボタンが有効かどうかを切り替えるには、三項演算子と「null」を使います。
-            // 三項演算子の条件式に、有効・無効かの条件を指定し、無効であれば「null」を返すようにします。
-            // https://www.choge-blog.com/programming/flutterbutton-enabled-disabled/
-            onPressed: (isButtonActive_O && isButtonActive_D) ? () => _onButtonPressed() : null,
-           // onPressed: (isButtonActive_O && isButtonActive_D) ? () {
-           //    final Origin = _textEditingController_O.text;
-           //    final Destination = _textEditingController_D.text;
-           //    CollectionReference posts = FirebaseFirestore.instance.collection('requests');
-           //    posts.add({"origin": _textEditingController_O, "destination": _textEditingController_D});
-           //  } : null,
-           child: Text('出発・到着時刻の設定に進む')),
-        ]),
-      ),
-    );
+              // ボタンが有効かどうかを切り替えるには、三項演算子と「null」を使います。
+              // 三項演算子の条件式に、有効・無効かの条件を指定し、無効であれば「null」を返すようにします。
+              // https://www.choge-blog.com/programming/flutterbutton-enabled-disabled/
+              onPressed: (isButtonActive_O && isButtonActive_D)
+                  ? () => _onButtonPressed()
+                  : null,
+              child: Text('出発・到着時刻の設定に進む')),
+        ]));
   }
-  _onButtonPressed(){
+
+  _onButtonPressed() {
     final origin = _textEditingController_O.text;
     final destination = _textEditingController_D.text;
     final usertype = "rider";
@@ -106,7 +86,8 @@ class _DetailReservePageState extends State<DetailReserve> {
 
     Navigator.push(
       context,
-      MaterialPageRoute(builder: (context) => Timing(user, usertype, origin, destination)),
+      MaterialPageRoute(
+          builder: (context) => Timing(user, usertype, origin, destination)),
       // MaterialPageRoute(builder: (context) => Timing(user: user, origin: origin, destination: destination)),
       // 遷移先の画面としてリスト追加画面を指定
       // onPressedには、(){}というカッコを書きます。
@@ -114,7 +95,6 @@ class _DetailReservePageState extends State<DetailReserve> {
     );
   }
 }
-
 
 // _onSubmitted0(String content){
 //   CollectionReference posts = FirebaseFirestore.instance.collection('requests');
@@ -135,4 +115,3 @@ class _DetailReservePageState extends State<DetailReserve> {
 //   /// 入力欄をクリアにする
 //   // _textEditingController.clear();
 // }
-

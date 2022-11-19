@@ -27,47 +27,51 @@ class _DriverRoutePageState extends State<DriverRoute> {
         title: const Text("乗車予定"),
       ),
       body: Center(
-        child: SizedBox(
-          width: double.infinity,
-          height: 150,
-          child: FutureBuilder(
-            future: getStaticImageWithMarker(
-                width: MediaQuery
-                    .of(context)
-                    .size
-                    .width
-                    .toInt(),
-                height: 150,
-                zoom: 13),
-            builder: (BuildContext context, AsyncSnapshot<String> snapshot) {
-              if (snapshot.hasData) {
-                return Image.network(snapshot.data!);
-              } else {
-                return Text("データが存在しません");
-              }
-            },
-          ),
+        child: FutureBuilder(
+          future: getDriverJsonString(),
+          builder: (BuildContext context, AsyncSnapshot<String> snapshot) {
+            if (snapshot.hasData) {
+              final driversJson = jsonDecode(snapshot.data!)["0"];
+
+              return SingleChildScrollView(
+                  child: Column(
+                children: [
+                  for (final item in driversJson)
+                    SizedBox(
+                        width: double.infinity,
+                        height: 150,
+                        child: Image.network(getStaticImageWithMarker(
+                          width: MediaQuery.of(context).size.width.toInt(),
+                          height: 150,
+                          driverJsonString:
+                              Uri.encodeComponent(jsonEncode(item)),
+                        ))),
+                ],
+              ));
+            } else {
+              return Text("データが存在しません");
+            }
+          },
         ),
       ),
     );
   }
 }
 
-Future<String> getStaticImageWithMarker(
-    {required int width, required int height, int zoom = 16}) async {
+String getStaticImageWithMarker(
+    {required int width,
+    required int height,
+    required String driverJsonString,
+    int zoom = 16}) {
   final mapboxPublicToken = dotenv.env['MAPBOX_PUBLIC_TOKEN'];
   final mapboxUserID = dotenv.env['MAPBOX_USER_ID'];
   final mapboxStyleID = dotenv.env['MAPBOX_STYLE_ID'];
-
-  final driverJson =
-  Uri.encodeComponent(jsonEncode(jsonDecode(await getDriverJson())["0"][0]));
-
   return 'https://api.mapbox.com/styles/v1/$mapboxUserID/$mapboxStyleID/static/'
-      'geojson($driverJson)'
+      'geojson($driverJsonString)'
       '/auto'
       '/${width}x$height?access_token=$mapboxPublicToken';
 }
 
-Future<String> getDriverJson() {
+Future<String> getDriverJsonString() {
   return rootBundle.loadString('driver.json');
 }

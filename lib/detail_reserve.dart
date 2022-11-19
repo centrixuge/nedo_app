@@ -58,6 +58,20 @@ class _DetailReservePageState extends State<DetailReserve> {
                 urlTemplate:
                     'https://api.mapbox.com/styles/v1/$mapboxUserID/$mapboxStyleID/tiles/{z}/{x}/{y}?access_token=$mapboxPublicToken',
               ),
+              MarkerLayer(
+                markers: [
+                  Marker(
+                      point: latLng.LatLng(35.654827, 139.796382),
+                      builder: (ctx) => IconButton(
+                          icon: const Icon(
+                            Icons.location_pin,
+                            color: Colors.redAccent,
+                          ),
+                          onPressed: () {
+                            () => _onButtonPressed();
+                          })),
+                ],
+              ),
             ],
           ),
           ElevatedButton(

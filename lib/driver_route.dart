@@ -45,10 +45,12 @@ class _DriverRoutePageState extends State<DriverRoute> {
                             child: Image.network(getStaticImageWithMarker(
                               width: MediaQuery.of(context).size.width.toInt(),
                               height: 150,
-                              driverJsonString:
-                                  Uri.encodeComponent(jsonEncode(item)),
+                              driverJsonString: Uri.encodeComponent(
+                                  jsonEncode(item["geojson"])),
                             ))),
-                        Text('abc')
+                        Text(item["dep_time"]),
+                        Text(item["arr_time"]),
+                        Text(arrTaskJA(item["arr_task"]))
                       ],
                     )
                 ],
@@ -60,6 +62,17 @@ class _DriverRoutePageState extends State<DriverRoute> {
         ),
       ),
     );
+  }
+}
+
+String arrTaskJA(String? arrTaskEN) {
+  switch (arrTaskEN) {
+    case "load":
+      return "荷積み";
+    case "unload":
+      return "荷下ろし";
+    default:
+      return "帰宅";
   }
 }
 

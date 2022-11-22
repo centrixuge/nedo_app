@@ -10,25 +10,25 @@ import 'package:flutter_map/flutter_map.dart';
 import 'package:latlong2/latlong.dart' as latLng;
 
 // class DetailReserve extends StatelessWidget{
-class DetailReserveDestination extends StatefulWidget {
+class DriverScheduleDestination extends StatefulWidget {
   final String origin;
   final String usertype;
   final User user;
 
-  const DetailReserveDestination(this.user, this.usertype, this.origin);
+  const DriverScheduleDestination(this.user, this.usertype, this.origin);
 
   // DetailReserve({Key? key, required this.user}) : super(key: key);
   @override
-  _DetailReserveDestinationPageState createState() =>
-      _DetailReserveDestinationPageState(this.user, this.usertype, this.origin);
+  _DriverScheduleDestinationPageState createState() =>
+      _DriverScheduleDestinationPageState(this.user, this.usertype, this.origin);
 }
 
-class _DetailReserveDestinationPageState
-    extends State<DetailReserveDestination> {
+class _DriverScheduleDestinationPageState
+    extends State<DriverScheduleDestination> {
   final TextEditingController _textEditingController_O =
-      TextEditingController();
+  TextEditingController();
   final TextEditingController _textEditingController_D =
-      TextEditingController();
+  TextEditingController();
 
   // dynamic isDisabled = true;
   // ignore: non_constant_identifier_names
@@ -41,7 +41,7 @@ class _DetailReserveDestinationPageState
   final String usertype;
   final User user;
 
-  _DetailReserveDestinationPageState(this.user, this.usertype, this.origin);
+  _DriverScheduleDestinationPageState(this.user, this.usertype, this.origin);
 
   @override
   Widget build(BuildContext context) {
@@ -68,7 +68,7 @@ class _DetailReserveDestinationPageState
                 children: [
                   TileLayer(
                     urlTemplate:
-                        'https://api.mapbox.com/styles/v1/$mapboxUserID/$mapboxStyleID/tiles/{z}/{x}/{y}?access_token=$mapboxPublicToken',
+                    'https://api.mapbox.com/styles/v1/$mapboxUserID/$mapboxStyleID/tiles/{z}/{x}/{y}?access_token=$mapboxPublicToken',
                   ),
                   MarkerLayer(
                     markers: [

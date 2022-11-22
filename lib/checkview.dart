@@ -3,46 +3,19 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
-Future<void> View() async {
-  WidgetsFlutterBinding.ensureInitialized();
-  await Firebase.initializeApp();
-  runApp(Checkview());
-}
+import 'package:flutter/widgets.dart';
 
-// class Checkview extends StatefulWidget {
-//   // final String origin;
-//   // final String destination;
-//   // final String departure;
-//   // final String arrival;
-//   // final String purpose;
-//   // final String capacity;
-//
-//   Checkview(
-//       {Key? key,
-//       // required this.origin,
-//       // required this.destination,
-//       // required this.departure,
-//       // required this.arrival,
-//       // required this.purpose,
-//       // required this.capacity
-//       })
-//       : super(key: key);
-//
-//   @override
-//   _CheckviewPageState createState() => _CheckviewPageState();
+
+// Future<void> View() async {
+//   WidgetsFlutterBinding.ensureInitialized();
+//   await Firebase.initializeApp();
+//   runApp(Checkview());
 // }
 
 class Checkview extends StatelessWidget {
+  String user;
   String? data;
-// class _CheckviewPageState extends State<Checkview> {
-  // final TextEditingController _textEditingController_P =
-  // TextEditingController();
-  // final TextEditingController _textEditingController_C =
-  // TextEditingController();
-  // // ignore: non_constant_identifier_names
-  // bool isButtonActive_P = false;
-  // // ignore: non_constant_identifier_names
-  // bool isButtonActive_C = false;
+  Checkview(this.user);
 
   @override
   Widget build(BuildContext context) {
@@ -53,7 +26,7 @@ class Checkview extends StatelessWidget {
       body: StreamBuilder<QuerySnapshot>(
         // body: FutureBuilder<QuerySnapshot>(
         //     future: FirebaseFirestore.instance.collection("requests").snapshots(),
-          stream: FirebaseFirestore.instance.collection("requests").snapshots(),
+          stream: FirebaseFirestore.instance.collection("requests").where('user', isEqualTo: user).snapshots(),
           builder: (BuildContext context,
               AsyncSnapshot<QuerySnapshot> snapshot) {
             return snapshot.hasData

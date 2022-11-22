@@ -8,12 +8,10 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 // class DetailReserve extends StatelessWidget{
 class DriverInfo extends StatefulWidget {
   const DriverInfo(this.user);
-
   final User user;
-
   // DetailReserve({Key? key, required this.user}) : super(key: key);
   @override
-  _DriverInfoPageState createState() => _DriverInfoPageState(this.user);
+  _DriverInfoPageState createState() => _DriverInfoPageState();
 }
 
 class _DriverInfoPageState extends State<DriverInfo> {
@@ -25,13 +23,12 @@ class _DriverInfoPageState extends State<DriverInfo> {
   // dynamic isDisabled = true;
   // ignore: non_constant_identifier_names
   bool isButtonActive_O = false;
-
   // ignore: non_constant_identifier_names
   bool isButtonActive_D = false;
 
   late final User user;
+  // _DriverInfoPageState(this.user);
 
-  _DriverInfoPageState(this.user);
 
   @override
   Widget build(BuildContext context) {
@@ -80,6 +77,7 @@ class _DriverInfoPageState extends State<DriverInfo> {
               labelText: '目的地',
             ),
           ),
+
           ElevatedButton(
               // ボタンが有効かどうかを切り替えるには、三項演算子と「null」を使います。
               // 三項演算子の条件式に、有効・無効かの条件を指定し、無効であれば「null」を返すようにします。
@@ -117,7 +115,7 @@ class _DriverInfoPageState extends State<DriverInfo> {
     Navigator.push(
       context,
       MaterialPageRoute(
-          builder: (context) => Timing(user, usertype, origin, destination)),
+          builder: (context) => Timing(user: user, usertype: usertype, origin: origin, destination: destination)),
       // MaterialPageRoute(builder: (context) => Timing(user: user, origin: origin, destination: destination)),
       // 遷移先の画面としてリスト追加画面を指定
       // onPressedには、(){}というカッコを書きます。
@@ -130,6 +128,7 @@ class _DriverInfoPageState extends State<DriverInfo> {
         context, MaterialPageRoute(builder: (context) => DriverRoute(user)));
   }
 }
+
 
 // _onSubmitted0(String content){
 //   CollectionReference posts = FirebaseFirestore.instance.collection('requests');

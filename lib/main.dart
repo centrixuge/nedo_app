@@ -33,7 +33,7 @@ class MyApp extends StatelessWidget {
           // PrimaryColor全体を変更したくない場合は、
           // ThemeData AppBarThemeを定義することもできます。
           appBarTheme: AppBarTheme(
-            color: Color(0xFFFF8A65),
+            color: Colors.blueGrey,
           )),
       // リスト一覧画面を表示
       // home: Itinerary(),
@@ -48,7 +48,7 @@ class MyApp extends StatelessWidget {
 // body中のColumnは縦に複数のウィジェットを並べて配置する時に使う
 
 // 色を宣言
-const PrimaryColor = Color(0xFFFFCCBC);
+const PrimaryColor = Colors.blueGrey;
 
 class UserType extends StatefulWidget {
 
@@ -63,6 +63,44 @@ class _UserTypeState extends State<UserType> {
   // メッセージ表示用
   String usertype = '';
   RadioValue _gValue = RadioValue.Rider;
+
+  final leftSection = Container(
+      child: Container(
+      //  constraints: BoxConstraints.expand(height:10),
+        alignment: Alignment.center,
+        child: Text("--", style: TextStyle(color: Colors.white)),
+    )
+  );
+
+  // final middleSection = Container(
+  //   child: Column(children: <Widget>[
+  //     Container(
+  //       color: Colors.indigoAccent,
+  //       child: Text("アイコンを", style: TextStyle(color: Colors.white), textAlign: TextAlign.center, maxLines: 1,
+  //           overflow: TextOverflow.ellipsis),),
+  //     Container(
+  //       color: Colors.indigoAccent,
+  //       child: Text("タッチしてください", style: TextStyle(color: Colors.white), textAlign: TextAlign.center, maxLines: 1,
+  //           overflow: TextOverflow.ellipsis),),
+  //     ]
+  //   )
+  // );
+
+  final middleSection = Container(
+      child:Container(
+          color: Colors.indigoAccent,
+          child: Text("アイコンをタッチしてください", style: TextStyle(color: Colors.white), textAlign: TextAlign.center, maxLines: 2,
+              overflow: TextOverflow.ellipsis),),
+  );
+
+  final rightSection = Container(
+    child: Container(
+        // constraints: BoxConstraints.expand(height:10),
+        alignment: Alignment.center,
+        child: Text("--", style: TextStyle(color: Colors.white)),
+      )
+  );
+
 
   // @override
   // Widget build(BuildContext context) {
@@ -106,24 +144,24 @@ class _UserTypeState extends State<UserType> {
       body: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: <Widget>[
-          Expanded(
-            child: Container(
-              constraints: BoxConstraints.expand(height:10),
-              alignment: Alignment.center,
-              width: 400,
-              height: 10,
-              // color: Colors.indigoAccent,
-              // child: Text("アイコンをタッチしてください", style: TextStyle(color: Colors.white)),
-            ),
-          ),
+          // Expanded(
+          //   child: Container(
+          //     constraints: BoxConstraints.expand(height:3),
+          //     alignment: Alignment.center,
+          //     width: 400,
+          //     height: 3,
+          //     // color: Colors.indigoAccent,
+          //     // child: Text("アイコンをタッチしてください", style: TextStyle(color: Colors.white)),
+          //   ),
+          // ),
 
-          Center(
-            child: Container(
-            alignment: Alignment.center,
-            width: 400,
-            height: 30,
-            color: Colors.indigoAccent,
-            child: Text("アイコンをタッチしてください", style: TextStyle(color: Colors.white)),
+          Expanded(
+            child: Row(
+              children: <Widget>[
+                Flexible(child: leftSection),
+                Expanded(child: middleSection),
+                Flexible(child: rightSection),
+              ],
             ),
           ),
 
@@ -136,7 +174,8 @@ class _UserTypeState extends State<UserType> {
                     child: FittedBox(
                         child: IconButton(
                             onPressed: () => _onButtonPressed_D(),
-                            icon: Icon(Icons.drive_eta_outlined)
+                            icon: Icon(Icons.drive_eta_outlined),
+                            splashRadius: 20,
                         )
                     ),
                   ),
@@ -148,7 +187,8 @@ class _UserTypeState extends State<UserType> {
                     child: FittedBox(
                       child: IconButton(
                           onPressed: () => _onButtonPressed_R(),
-                          icon: Icon(Icons.supervised_user_circle_sharp)
+                          icon: Icon(Icons.supervised_user_circle_sharp),
+                          splashRadius: 20,
                       )
                   ),
                 ),
@@ -202,10 +242,22 @@ class _UserTypeState extends State<UserType> {
                     child: Text("ライドシェア利用", textAlign: TextAlign.center, maxLines: 1,
                             overflow: TextOverflow.ellipsis, style: TextStyle(fontSize: 24))
                     ),
-                  ),
+                ),
+
               ],
             ),
           ),
+          Expanded(
+            child: Container(
+              constraints: BoxConstraints.expand(height:3),
+              alignment: Alignment.center,
+              width: 400,
+              height: 3,
+              // color: Colors.indigoAccent,
+              // child: Text("アイコンをタッチしてください", style: TextStyle(color: Colors.white)),
+            ),
+          ),
+
         ],
       ),
     );

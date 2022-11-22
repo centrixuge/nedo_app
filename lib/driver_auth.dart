@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:nedo_app/driver_schedule_o.dart';
 import 'driver_info.dart';
 
 // ログイン用フォーム
@@ -68,7 +69,7 @@ class _DriverAuthPageState extends State<DriverAuth> {
                       // チャット画面に遷移＋ログイン画面を破棄
                       await Navigator.of(context).pushReplacement(
                         MaterialPageRoute(builder: (context) {
-                          return DriverInfo(result.user!);
+                          return DriverScheduleOrigin(result.user!);
                         }),
                       );
                     } catch (e) {
@@ -98,7 +99,7 @@ class _DriverAuthPageState extends State<DriverAuth> {
                       // チャット画面に遷移＋ログイン画面を破棄
                       await Navigator.of(context).pushReplacement(
                         MaterialPageRoute(builder: (context) {
-                          return DriverInfo(result.user!);
+                          return DriverScheduleOrigin(result.user!);
                         }),
                       );
                     } catch (e) {

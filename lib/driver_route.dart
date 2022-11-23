@@ -5,7 +5,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
-import 'package:http/http.dart' as http;
+import 'package:nedo_app/api.dart';
 
 class DriverRoute extends StatefulWidget {
   const DriverRoute(this.user);
@@ -102,8 +102,3 @@ String getStaticImageWithMarker(
       '/${width}x$height?access_token=$mapboxPublicToken';
 }
 
-Future<String> getDriverJsonString() async {
-  final response =
-      await http.get(Uri.parse("http://localhost:5000/driver_route/1"));
-  return response.body;
-}

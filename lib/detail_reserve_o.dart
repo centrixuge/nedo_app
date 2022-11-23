@@ -8,6 +8,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:latlong2/latlong.dart' as latLng;
+import 'package:nedo_app/api.dart';
 
 // class DetailReserve extends StatelessWidget{
 class DetailReserveOrigin extends StatefulWidget {
@@ -45,10 +46,10 @@ class _DetailReserveOriginPageState extends State<DetailReserveOrigin> {
         future: getNodeJsonString(),
         builder: (BuildContext context, AsyncSnapshot<String> snapshot) {
           if (snapshot.hasData) {
-            final nodeJson = jsonDecode(snapshot.data!)["features"];
+            final nodeJson = jsonDecode(snapshot.data!);
             return FlutterMap(
                 options: MapOptions(
-                  center: latLng.LatLng(35.654827, 139.796382),
+                  center: latLng.LatLng(36.552541, 140.058133),
                   zoom: 16.0,
                   maxZoom: 17.0,
                   minZoom: 3.0,
@@ -126,7 +127,3 @@ class _DetailReserveOriginPageState extends State<DetailReserveOrigin> {
 //   /// 入力欄をクリアにする
 //   // _textEditingController.clear();
 // }
-
-Future<String> getNodeJsonString() {
-  return rootBundle.loadString('node.json');
-}

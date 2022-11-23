@@ -99,5 +99,3 @@ flutter:
 
   assets:
     - .env
-    - driver.json  # TODO: APIサーバー経由で読むようにする
-    - node.json

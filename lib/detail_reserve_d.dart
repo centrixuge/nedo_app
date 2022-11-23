@@ -58,10 +58,10 @@ class _DetailReserveDestinationPageState
         future: getNodeJsonString(),
         builder: (BuildContext context, AsyncSnapshot<String> snapshot) {
           if (snapshot.hasData) {
-            final nodeJson = jsonDecode(snapshot.data!);
+            final nodeJson = jsonDecode(snapshot.data!)["features"];
             return FlutterMap(
                 options: MapOptions(
-                  center: latLng.LatLng(36.552541, 140.058133),
+                  center: latLng.LatLng(35.654827, 139.796382),
                   zoom: 16.0,
                   maxZoom: 17.0,
                   minZoom: 3.0,

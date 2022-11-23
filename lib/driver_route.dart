@@ -5,6 +5,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:http/http.dart' as http;
 
 class DriverRoute extends StatefulWidget {
   const DriverRoute(this.user);
@@ -31,12 +32,12 @@ class _DriverRoutePageState extends State<DriverRoute> {
           future: getDriverJsonString(),
           builder: (BuildContext context, AsyncSnapshot<String> snapshot) {
             if (snapshot.hasData) {
-              final driversJson = jsonDecode(snapshot.data!)["0"];
+              final driversJson = jsonDecode(snapshot.data!);
 
               return SingleChildScrollView(
                   child: Column(
                 children: [
-                  for (final item in driversJson)
+                  for (final item in driversJson["trip"])
                     Column(
                       children: [
                         Container(
@@ -101,6 +102,8 @@ String getStaticImageWithMarker(
       '/${width}x$height?access_token=$mapboxPublicToken';
 }
 
-Future<String> getDriverJsonString() {
-  return rootBundle.loadString('driver.json');
+Future<String> getDriverJsonString() async {
+  final response =
+      await http.get(Uri.parse("http://localhost:5000/driver_route/1"));
+  return response.body;
 }

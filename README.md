@@ -4,6 +4,13 @@ NEDO Flutter application.
 
 ## Getting Started
 
+```shell
+flutter run --web-port 8080
+```
+
+- localhostで起動したflaskサーバーと通信するために、ポートを固定する必要があります。
+
+
 This project is a starting point for a Flutter application.
 
 A few resources to get you started if this is your first Flutter project:

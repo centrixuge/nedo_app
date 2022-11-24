@@ -6,6 +6,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:nedo_app/api.dart';
+import 'package:nedo_app/driver_schedule_o.dart';
 
 class DriverRoute extends StatefulWidget {
   const DriverRoute(this.user);
@@ -27,8 +28,8 @@ class _DriverRoutePageState extends State<DriverRoute> {
       appBar: AppBar(
         title: const Text("乗車予定"),
       ),
-      body: Center(
-        child: FutureBuilder(
+      body: Column(children: [
+        FutureBuilder(
           future: getDriverJsonString(),
           builder: (BuildContext context, AsyncSnapshot<String> snapshot) {
             if (snapshot.hasData) {
@@ -72,7 +73,17 @@ class _DriverRoutePageState extends State<DriverRoute> {
             }
           },
         ),
-      ),
+        ElevatedButton(
+            onPressed: () => _onButtonPressed(),
+            child: const Text('新しい旅程を設定する'))
+      ]),
+    );
+  }
+
+  _onButtonPressed() {
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => DriverScheduleOrigin(user)),
     );
   }
 }
@@ -101,4 +112,3 @@ String getStaticImageWithMarker(
       '/auto'
       '/${width}x$height?access_token=$mapboxPublicToken';
 }
-

@@ -184,11 +184,11 @@ class _TimingPageState extends State<Timing> {
                     child: ConstrainedBox(
                         constraints: BoxConstraints.expand(height: 40.0),
                         child: ElevatedButton(
-                          child: Text("出発希望時刻の選択",
+                          child: const Text("出発希望時刻の選択",
                               textAlign: TextAlign.center,
                               maxLines: 1,
                               overflow: TextOverflow.ellipsis,
-                              style: TextStyle(fontSize: 16)),
+                              style: TextStyle(fontSize: 12)),
                           onPressed: () {
                             showDatePicker_B();
                           },
@@ -200,11 +200,11 @@ class _TimingPageState extends State<Timing> {
                       Text(selectedDate_B == null ? "" : "選択した出発時刻",
                           textAlign: TextAlign.center,
                           overflow: TextOverflow.ellipsis,
-                          style: TextStyle(fontSize: 16)),
+                          style: const TextStyle(fontSize: 12)),
                       Text(selectedDate_B == null ? "" : strDate_B,
                           textAlign: TextAlign.center,
                           overflow: TextOverflow.ellipsis,
-                          style: TextStyle(fontSize: 16)),
+                          style: const TextStyle(fontSize: 12)),
                     ]))
               ])),
               Expanded(
@@ -214,11 +214,11 @@ class _TimingPageState extends State<Timing> {
                     child: ConstrainedBox(
                         constraints: BoxConstraints.expand(height: 40.0),
                         child: ElevatedButton(
-                          child: Text("到着希望時刻の選択",
+                          child: const Text("到着希望時刻の選択",
                               textAlign: TextAlign.center,
                               maxLines: 1,
                               overflow: TextOverflow.ellipsis,
-                              style: TextStyle(fontSize: 16)),
+                              style: TextStyle(fontSize: 12)),
                           onPressed: () {
                             showDatePicker_E();
                           },
@@ -230,11 +230,11 @@ class _TimingPageState extends State<Timing> {
                     Text(selectedDate_E == null ? "" : "選択した到着時刻",
                         textAlign: TextAlign.center,
                         overflow: TextOverflow.ellipsis,
-                        style: TextStyle(fontSize: 16)),
+                        style: const TextStyle(fontSize: 12)),
                     Text(selectedDate_E == null ? "" : strDate_E,
                         textAlign: TextAlign.center,
                         overflow: TextOverflow.ellipsis,
-                        style: TextStyle(fontSize: 16)),
+                        style: const TextStyle(fontSize: 12)),
                   ],
                 ))
               ])),
@@ -245,11 +245,11 @@ class _TimingPageState extends State<Timing> {
                     child: ConstrainedBox(
                         constraints: BoxConstraints.expand(height: 40.0),
                         child: ElevatedButton(
-                          child: Text("座席数の選択",
+                          child: const Text("座席数の選択",
                               textAlign: TextAlign.center,
                               maxLines: 1,
                               overflow: TextOverflow.ellipsis,
-                              style: TextStyle(fontSize: 16)),
+                              style: TextStyle(fontSize: 12)),
                           onPressed: () {
                             showModalBottomSheet(
                               context: context,
@@ -284,11 +284,11 @@ class _TimingPageState extends State<Timing> {
                       Text(selectedSeat == null ? "" : "選択した座席数",
                           textAlign: TextAlign.center,
                           overflow: TextOverflow.ellipsis,
-                          style: TextStyle(fontSize: 16)),
+                          style: const TextStyle(fontSize: 12)),
                       Text(selectedSeat == null ? "" : selectedSeat,
                           textAlign: TextAlign.center,
                           overflow: TextOverflow.ellipsis,
-                          style: TextStyle(fontSize: 16)),
+                          style: const TextStyle(fontSize: 12)),
                     ],
                   ))
                 ]),

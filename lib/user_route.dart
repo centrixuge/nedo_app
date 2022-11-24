@@ -56,7 +56,12 @@ class _UserRoutePageState extends State<UserRoute> {
                   ],
                 );
               } else {
-                return const Text("データが存在しません");
+                return Container(
+                  alignment: Alignment.center,
+                  child: const CircularProgressIndicator(
+                    color: Colors.green,
+                  ),
+                );
               }
             }));
   }

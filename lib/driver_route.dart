@@ -69,7 +69,12 @@ class _DriverRoutePageState extends State<DriverRoute> {
                 ],
               ));
             } else {
-              return const Text("データが存在しません");
+              return Container(
+                alignment: Alignment.center,
+                child: const CircularProgressIndicator(
+                  color: Colors.green,
+                ),
+              );
             }
           },
         ),

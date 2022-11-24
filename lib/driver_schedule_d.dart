@@ -44,7 +44,12 @@ class _DriverScheduleDestinationPageState
             final nodeJson = jsonDecode(snapshot.data!);
             return selectMap(nodeJson, _onButtonPressed);
           } else {
-            return const Text("データが存在しません");
+            return Container(
+              alignment: Alignment.center,
+              child: const CircularProgressIndicator(
+                color: Colors.green,
+              ),
+            );
           }
         },
       ),

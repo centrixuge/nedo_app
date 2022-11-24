@@ -231,16 +231,16 @@ class _UserTypeState extends State<UserType> {
           // ),
                 Expanded(
                   child: ConstrainedBox(
-                    constraints: BoxConstraints.expand(height: 40.0),
-                    child: Text("登録ドライバー", textAlign: TextAlign.center, maxLines: 1,
+                    constraints: const BoxConstraints.expand(height: 40.0),
+                    child: const Text("登録ドライバー", textAlign: TextAlign.center, maxLines: 1,
                           overflow: TextOverflow.ellipsis, style: TextStyle(fontSize: 24)),
                   ),
                 ),
 
                 Expanded(
                   child: ConstrainedBox(
-                    constraints: BoxConstraints.expand(height: 40.0),
-                    child: Text("ライドシェア利用", textAlign: TextAlign.center, maxLines: 1,
+                    constraints: const BoxConstraints.expand(height: 40.0),
+                    child: const Text("貨客混載を利用", textAlign: TextAlign.center, maxLines: 1,
                             overflow: TextOverflow.ellipsis, style: TextStyle(fontSize: 24))
                     ),
                 ),

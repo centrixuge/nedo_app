@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'checkview.dart';
-import 'purpose.dart';
 import 'dart:convert';
+import 'package:intl/intl.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -69,8 +69,6 @@ class _TimingPageState extends State<Timing> {
     destination = widget.destination;
     usertype = widget.usertype;
     user = widget.user;
-    postTiming(jsonEncode(
-        {"usertype": usertype, "origin": origin, "destination": destination}));
   }
 
   void showDatePicker_B() {
@@ -247,7 +245,7 @@ class _TimingPageState extends State<Timing> {
                     child: ConstrainedBox(
                         constraints: BoxConstraints.expand(height: 40.0),
                         child: ElevatedButton(
-                          child: Text("到着希望時刻の選択",
+                          child: Text("座席数の選択",
                               textAlign: TextAlign.center,
                               maxLines: 1,
                               overflow: TextOverflow.ellipsis,
@@ -343,11 +341,20 @@ class _TimingPageState extends State<Timing> {
       "departure": departure,
       "arrival": arrival,
       "destination": destination,
-      "departure": departure,
-      "arrival": arrival,
       // "purpose": purpose,
       "capacity": capacity,
     });
+    
+    DateFormat outputFormat = DateFormat("yyyy-MM-dd hh:mm");
+
+    postTiming(jsonEncode({
+      "usertype": usertype,
+      "origin": origin,
+      "departure": outputFormat.format(departure),
+      "arrival": outputFormat.format(arrival),
+      "destination": destination
+    }));
+
     SetOptions(merge: true);
     // 遷移先の画面としてリスト追加画面を指定
     // onPressedには、(){}というカッコを書きます。

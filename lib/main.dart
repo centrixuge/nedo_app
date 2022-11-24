@@ -35,6 +35,7 @@ class MyApp extends StatelessWidget {
           appBarTheme: AppBarTheme(
             color: Colors.blueGrey,
           )),
+      debugShowCheckedModeBanner: false,
       // リスト一覧画面を表示
       // home: Itinerary(),
       home: UserType(),

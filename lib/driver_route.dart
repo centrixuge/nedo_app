@@ -5,6 +5,8 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:nedo_app/api.dart';
+import 'package:nedo_app/driver_schedule_o.dart';
 
 class DriverRoute extends StatefulWidget {
   const DriverRoute(this.user);
@@ -26,17 +28,17 @@ class _DriverRoutePageState extends State<DriverRoute> {
       appBar: AppBar(
         title: const Text("乗車予定"),
       ),
-      body: Center(
-        child: FutureBuilder(
+      body: Column(children: [
+        FutureBuilder(
           future: getDriverJsonString(),
           builder: (BuildContext context, AsyncSnapshot<String> snapshot) {
             if (snapshot.hasData) {
-              final driversJson = jsonDecode(snapshot.data!)["0"];
+              final driversJson = jsonDecode(snapshot.data!);
 
               return SingleChildScrollView(
                   child: Column(
                 children: [
-                  for (final item in driversJson)
+                  for (final item in driversJson["trip"])
                     Column(
                       children: [
                         Container(
@@ -71,7 +73,17 @@ class _DriverRoutePageState extends State<DriverRoute> {
             }
           },
         ),
-      ),
+        ElevatedButton(
+            onPressed: () => _onButtonPressed(),
+            child: const Text('新しい旅程を設定する'))
+      ]),
+    );
+  }
+
+  _onButtonPressed() {
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => DriverScheduleOrigin(user)),
     );
   }
 }
@@ -99,8 +111,4 @@ String getStaticImageWithMarker(
       'geojson($driverJsonString)'
       '/auto'
       '/${width}x$height?access_token=$mapboxPublicToken';
-}
-
-Future<String> getDriverJsonString() {
-  return rootBundle.loadString('driver.json');
 }

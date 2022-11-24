@@ -44,7 +44,3 @@ app.*.map.json
 /android/app/release
 
 .env
-
-# TODO: APIサーバー経由で読むようにする
-driver.json
-node.json

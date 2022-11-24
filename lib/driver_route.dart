@@ -25,11 +25,10 @@ class _DriverRoutePageState extends State<DriverRoute> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text("乗車予定"),
-      ),
-      body: Column(children: [
-        FutureBuilder(
+        appBar: AppBar(
+          title: const Text("乗車予定"),
+        ),
+        body: FutureBuilder(
           future: getDriverJsonString(),
           builder: (BuildContext context, AsyncSnapshot<String> snapshot) {
             if (snapshot.hasData) {
@@ -38,34 +37,14 @@ class _DriverRoutePageState extends State<DriverRoute> {
               return SingleChildScrollView(
                   child: Column(
                 children: [
-                  for (final item in driversJson["trip"])
-                    Column(
-                      children: [
-                        Container(
-                            width: double.infinity,
-                            height: 150,
-                            padding: const EdgeInsets.all(10),
-                            child: Image.network(getStaticImageWithMarker(
-                              width: MediaQuery.of(context).size.width.toInt(),
-                              height: 150,
-                              driverJsonString: Uri.encodeComponent(
-                                  jsonEncode(item["geojson"])),
-                            ))),
-                        Container(
-                          alignment: Alignment.centerLeft,
-                          padding: const EdgeInsets.only(left: 30, right: 30),
-                          child: RichText(
-                              text: TextSpan(children: [
-                            TextSpan(text: '🔵${item["dep_time"]} 発予定'),
-                            const TextSpan(text: '\n'),
-                            TextSpan(text: '🔴${item["arr_time"]} 着予定 '),
-                            TextSpan(
-                                text: arrTaskJA(item["arr_task"]),
-                                style: TextStyle(fontWeight: FontWeight.bold))
-                          ])),
-                        )
-                      ],
-                    )
+                  Column(
+                    children: [
+                      for (final item in driversJson["trip"]) driverTrip(item)
+                    ],
+                  ),
+                  ElevatedButton(
+                      onPressed: () => _onButtonPressed(),
+                      child: const Text('新しい旅程を設定する'))
                 ],
               ));
             } else {
@@ -77,11 +56,36 @@ class _DriverRoutePageState extends State<DriverRoute> {
               );
             }
           },
-        ),
-        ElevatedButton(
-            onPressed: () => _onButtonPressed(),
-            child: const Text('新しい旅程を設定する'))
-      ]),
+        ));
+  }
+
+  driverTrip(item) {
+    return Column(
+      children: [
+        Container(
+            width: double.infinity,
+            height: 150,
+            padding: const EdgeInsets.all(10),
+            child: Image.network(getStaticImageWithMarker(
+              width: MediaQuery.of(context).size.width.toInt(),
+              height: 150,
+              driverJsonString:
+                  Uri.encodeComponent(jsonEncode(item["geojson"])),
+            ))),
+        Container(
+          alignment: Alignment.centerLeft,
+          padding: const EdgeInsets.only(left: 30, right: 30),
+          child: RichText(
+              text: TextSpan(children: [
+            TextSpan(text: '🔵${item["dep_time"]} 発予定'),
+            const TextSpan(text: '\n'),
+            TextSpan(text: '🔴${item["arr_time"]} 着予定 '),
+            TextSpan(
+                text: arrTaskJA(item["arr_task"]),
+                style: TextStyle(fontWeight: FontWeight.bold))
+          ])),
+        )
+      ],
     );
   }
 
